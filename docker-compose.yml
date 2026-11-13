@@ -1,0 +1,21 @@
+
+services:
+  db:
+    image: postgres:16
+    container_name: java-hub-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-javahub}
+      POSTGRES_USER: ${POSTGRES_USER:-javahub}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    ports:
+      - "5433:5432"
+    volumes:
+      - javahub_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U javahub -d javahub"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  javahub_data:
